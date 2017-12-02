@@ -1,0 +1,29 @@
+name: Clank
+main: hototya\item\Clank
+version: 1.0.0
+api: [3.0.0-ALPHA9]
+
+load: POSTWORLD
+author: hototya
+description: アイテムガチャプラグイン
+website: https://github.com/hototya/Clank
+commands:
+  clank:
+    description: ガチャを回します。
+    usage: /clank
+    permission: ClankPlugin.command.clank
+  aclank:
+    description: ガチャ管理コマンド
+    usage: /aclank
+    permission: ClankPlugin.command.aclank
+permissions:
+  ClankPlugin.command.*:
+    description: Allows the user to run a command of ClankPlugin
+    default: true
+    children:
+      ClankPlugin.command.clank:
+        description: Allows the user to run the clank command
+        default: true
+      ClankPlugin.command.aclank:
+        description: Allows the user to run the aclank command
+        default: op
