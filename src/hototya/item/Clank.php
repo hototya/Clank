@@ -47,9 +47,7 @@ class Clank extends PluginBase implements Listener
             "money" => 200,
             "item" => [
                 0 => "1:0:10",
-                1 => "5:0:32",
-                2 => "5:1:32",
-                3 => "17:0:16"
+                1 => "5:0:32"
             ]
         ]);
         $this->C = $this->config->getAll();
@@ -87,6 +85,11 @@ class Clank extends PluginBase implements Listener
                 if ($sender instanceof Player) {
                     if ($this->C["money"] <= $this->economy->myMoney($sender)) {
                         $items = $this->C["item"];
+                        $count = count($items);
+                        if ($count === 0) {
+                            $sender->sendMessage("エラーによりガチャはキャンセルされました。");
+                            return false;
+                        }
                         $item = explode(":", $items[mt_rand(0, count($items) - 1)]);
                         $resultItem = Item::get($item[0], $item[1], $item[2]);
                         if ($sender->getInventory()->canAddItem($resultItem)) {
@@ -240,6 +243,7 @@ class Clank extends PluginBase implements Listener
                     break;
                 case $this->fid2:
                     $array = json_decode($fData);
+                    if ($array === null) return;
                     unset($array[0]);
                     foreach ($array as $element) {
                         if (!is_numeric($element)) {
@@ -253,6 +257,7 @@ class Clank extends PluginBase implements Listener
                     break;
                 case $this->fid3:
                     $array = json_decode($fData);
+                    if ($array === null) return;
                     unset($array[0]);
                     foreach ($array as $element) {
                         if (!is_numeric($element)) {
@@ -272,6 +277,7 @@ class Clank extends PluginBase implements Listener
                     break;
                 case $this->fid4:
                     $array = json_decode($fData);
+                    if ($array === null) return;
                     if (is_numeric($array[1])) {
                         $this->C["money"] = (int) $array[1];
                         $player->sendMessage("変更が完了しました。");
