@@ -95,7 +95,7 @@ class Clank extends PluginBase implements Listener
                         if ($sender->getInventory()->canAddItem($resultItem)) {
                             $this->economy->reduceMoney($sender, $this->C["money"]);
                             $sender->setImmobile(true);
-                            $this->getServer()->getScheduler()->scheduleRepeatingTask(new ItemAnime($sender, $resultItem), 2);
+                            $this->getScheduler()->scheduleRepeatingTask(new ItemAnime($sender, $resultItem), 2);
                         } else {
                             $sender->sendMessage("アイテムが追加できない為、ガチャはキャンセルされました。");
                         }
@@ -328,7 +328,7 @@ class ItemAnime extends Task
         $pk->item = Item::get($id, 0, 1);
         if (40 < $this->count) {
             $pk->item = $this->pk->item;
-            Server::getInstance()->getScheduler()->cancelTask($this->getTaskId());
+            $this->getScheduler()->cancelTask($this->getTaskId());
         }
         $this->player->dataPacket($pk);
         ++$this->count;
@@ -336,7 +336,7 @@ class ItemAnime extends Task
 
     public function onCancel()
     {
-        Server::getInstance()->getScheduler()->scheduleDelayedTask(new Result($this->player, $this->pk), 20 * 3);
+        $this->getScheduler()->scheduleDelayedTask(new Result($this->player, $this->pk), 20 * 3);
     }
 }
 
